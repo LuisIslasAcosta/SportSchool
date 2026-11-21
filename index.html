@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1c2024">
+  <meta name="description" content="SportSchool: seguimiento y desempeño deportivo escolar">
+  <title>SportSchool</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Pantalla Splash -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <img src="icons/icon-512.png" alt="Logo SportSchool" width="200" height="200">
+    <h1><span>Sport</span>School</h1>
+    <p>Seguimiento y desempeño deportivo escolar</p>
+    <div class="loader"></div>
+  </div>
+
+  <!-- App Shell -->
+  <header class="topbar">
+    <a href="#inicio" class="brand">
+      <img src="icons/icon-192.png" alt="" width="36" height="36"> SportSchool
+    </a>
+    <div class="topbar-der">
+      <span id="estado-red" class="badge badge-ok">En línea</span>
+      <button id="btn-instalar" class="btn btn-sm btn-claro" hidden>Instalar</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Módulos">
+    <a href="#inicio">Inicio</a>
+    <a href="#estudiantes">Estudiantes</a>
+    <a href="#actividades">Actividades</a>
+    <a href="#historial">Historial</a>
+    <a href="#desempeno">Desempeño</a>
+  </nav>
+
+  <main class="contenedor">
+    <!-- HOME -->
+    <section id="inicio" class="vista">
+      <div class="hero">
+        <h2>Bienvenido a SportSchool</h2>
+        <p>Registra a tus estudiantes, captura sus actividades deportivas y consulta su historial e indicadores de desempeño, incluso sin conexión a Internet.</p>
+      </div>
+
+      <div id="resumen-inicio" class="tarjetas"></div>
+
+      <h3 class="subtitulo">Módulos</h3>
+      <div class="modulos">
+        <a class="modulo" href="#estudiantes"><span>👤</span><strong>Estudiantes</strong><small>Registrar nombre, grupo y disciplina</small></a>
+        <a class="modulo" href="#actividades"><span>🏃</span><strong>Actividades</strong><small>Capturar fecha, duración y distancia</small></a>
+        <a class="modulo" href="#historial"><span>📋</span><strong>Historial</strong><small>Consultar registros por estudiante</small></a>
+        <a class="modulo" href="#desempeno"><span>📈</span><strong>Desempeño</strong><small>Indicadores y comparativas</small></a>
+      </div>
+
+      <h3 class="subtitulo">Herramientas de la PWA</h3>
+      <div class="panel-grid">
+        <article class="panel">
+          <h4>Service Worker</h4>
+          <p id="estado-sw" class="texto-sec">Comprobando…</p>
+        </article>
+        <article class="panel">
+          <h4>Notificaciones</h4>
+          <p id="estado-notif" class="texto-sec">—</p>
+          <button id="btn-notif" class="btn btn-sm">Activar notificaciones</button>
+        </article>
+        <article class="panel">
+          <h4>Sincronización (Fetch API)</h4>
+          <p id="estado-sync" class="texto-sec">—</p>
+          <button id="btn-sync" class="btn btn-sm">Enviar pendientes</button>
+        </article>
+        <article class="panel">
+          <h4>Probar servicio remoto</h4>
+          <p class="texto-sec">Consulta GET al endpoint de prueba.</p>
+          <button id="btn-fetch" class="btn btn-sm">Probar Fetch</button>
+        </article>
+      </div>
+      <pre id="resultado-fetch" class="consola" hidden></pre>
+
+      <div id="bloque-demo" class="aviso" hidden>
+        <p>¿Aún no tienes registros? Puedes cargar datos de ejemplo para probar la aplicación.</p>
+        <button id="btn-demo" class="btn btn-sm btn-sec">Cargar datos de ejemplo</button>
+      </div>
+    </section>
+
+    <!-- ESTUDIANTES -->
+    <section id="estudiantes" class="vista" hidden>
+      <h2>Registro de estudiantes</h2>
+      <form id="form-estudiante" class="formulario" novalidate>
+        <label>Nombre completo
+          <input name="nombre" type="text" required maxlength="80" placeholder="Ej. Ana López Pérez">
+        </label>
+        <div class="fila">
+          <label>Grupo
+            <input name="grupo" type="text" required maxlength="20" placeholder="Ej. 3°B">
+          </label>
+          <label>Disciplina deportiva
+            <select name="disciplina" required>
+              <option value="">Selecciona…</option>
+              <option>Atletismo</option>
+              <option>Básquetbol</option>
+              <option>Fútbol</option>
+              <option>Natación</option>
+              <option>Voleibol</option>
+              <option>Ciclismo</option>
+              <option>Otra</option>
+            </select>
+          </label>
+        </div>
+        <p class="error" data-error></p>
+        <button class="btn" type="submit">Guardar estudiante</button>
+      </form>
+
+      <h3 class="subtitulo">Estudiantes registrados</h3>
+      <div id="lista-estudiantes"></div>
+    </section>
+
+    <!-- ACTIVIDADES -->
+    <section id="actividades" class="vista" hidden>
+      <h2>Registro de actividades</h2>
+      <p id="aviso-sin-estudiantes" class="aviso" hidden>Primero registra al menos un estudiante en el módulo <a href="#estudiantes">Estudiantes</a>.</p>
+      <form id="form-actividad" class="formulario" novalidate>
+        <label>Estudiante
+          <select name="estudiante" id="act-estudiante" required></select>
+        </label>
+        <div class="fila">
+          <label>Fecha
+            <input name="fecha" type="date" required>
+          </label>
+          <label>Actividad
+            <input name="actividad" type="text" list="tipos-actividad" required maxlength="60" placeholder="Ej. Carrera">
+            <datalist id="tipos-actividad">
+              <option value="Carrera"><option value="Entrenamiento de fuerza"><option value="Partido">
+              <option value="Natación"><option value="Ciclismo"><option value="Caminata"><option value="Circuito funcional">
+            </datalist>
+          </label>
+        </div>
+        <div class="fila">
+          <label>Duración (minutos)
+            <input name="duracion" type="number" min="1" max="600" step="1" required placeholder="45">
+          </label>
+          <label>Distancia (km)
+            <input name="distancia" type="number" min="0" max="300" step="0.01" placeholder="0">
+          </label>
+        </div>
+        <label>Observaciones
+          <textarea name="observaciones" rows="3" maxlength="300" placeholder="Ritmo, sensaciones, lesiones, etc."></textarea>
+        </label>
+        <label class="check">
+          <input name="ubicacion" type="checkbox"> Registrar ubicación de la actividad (Geolocation API)
+        </label>
+        <p class="error" data-error></p>
+        <button class="btn" type="submit">Guardar actividad</button>
+      </form>
+
+      <h3 class="subtitulo">Últimas actividades registradas</h3>
+      <div id="ultimas-actividades"></div>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section id="historial" class="vista" hidden>
+      <h2>Historial deportivo</h2>
+      <label class="filtro">Estudiante
+        <select id="filtro-historial"></select>
+      </label>
+      <div id="tabla-historial"></div>
+    </section>
+
+    <!-- DESEMPEÑO -->
+    <section id="desempeno" class="vista" hidden>
+      <h2>Indicadores de desempeño</h2>
+      <label class="filtro">Estudiante
+        <select id="filtro-desempeno"></select>
+      </label>
+      <div id="indicadores" class="tarjetas"></div>
+      <h3 class="subtitulo" id="titulo-grafica">Minutos acumulados</h3>
+      <div id="grafica" class="grafica"></div>
+      <div id="ranking"></div>
+    </section>
+  </main>
+
+  <footer class="pie">SportSchool · PWA de seguimiento deportivo escolar</footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
