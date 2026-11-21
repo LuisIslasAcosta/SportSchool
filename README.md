@@ -64,7 +64,7 @@ Se usa el endpoint de prueba `https://jsonplaceholder.typicode.com/posts`. Respo
 3. **Persistencia:** recargar la página (F5); los registros siguen ahí. En DevTools → *Application → IndexedDB → sportschool-db* se ven los datos.
 4. **Historial e indicadores:** revisar los módulos Historial y Desempeño.
 5. **Fetch API:** botón *Probar Fetch* en el Home y columna *Envío* en el historial. En DevTools → *Network* se ven el `GET` y el `POST`.
-6. **Offline:** DevTools → *Network → Offline* (o *Application → Service Workers → Offline*) y recargar; la app y los datos siguen disponibles. En *Application → Cache Storage* aparece `sportschool-v1.1.0`.
+6. **Offline:** DevTools → *Network → Offline* (o *Application → Service Workers → Offline*) y recargar; la app y los datos siguen disponibles. En *Application → Cache Storage* aparece `sportschool-v1.2.0`.
 7. **Notificación:** pulsar *Activar notificaciones*, aceptar el permiso y guardar una actividad.
 8. **Lighthouse:** DevTools → *Lighthouse* → categoría *Progressive Web App / Best practices*.
 9. **Geolocalización:** marcar *Registrar ubicación*, aceptar el permiso y abrir el enlace *Ver mapa* del historial.

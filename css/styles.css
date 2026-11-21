@@ -101,7 +101,8 @@ a { color: var(--verde-osc); }
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .modulo:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(15,23,42,.12); }
-.modulo span { font-size: 1.6rem; }
+.modulo { border-top: 4px solid var(--verde); }
+.modulo strong { font-size: 1.05rem; }
 .modulo small { color: var(--gris); }
 
 .panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }

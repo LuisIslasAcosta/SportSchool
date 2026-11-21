@@ -1,5 +1,5 @@
 // Service Worker de SportSchool
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const CACHE = `sportschool-${VERSION}`;
 
 // Recursos principales (App Shell) que se precargan en la instalación

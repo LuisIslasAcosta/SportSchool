@@ -127,7 +127,7 @@ function renderEstudiantes() {
 function filasActividades(acts, conEstudiante = true) {
   return acts.map((a) => {
     const ubic = a.ubicacion
-      ? `<a href="https://www.openstreetmap.org/?mlat=${a.ubicacion.lat}&mlon=${a.ubicacion.lng}#map=17/${a.ubicacion.lat}/${a.ubicacion.lng}" target="_blank" rel="noopener">📍 Ver mapa</a>`
+      ? `<a href="https://www.openstreetmap.org/?mlat=${a.ubicacion.lat}&mlon=${a.ubicacion.lng}#map=17/${a.ubicacion.lat}/${a.ubicacion.lng}" target="_blank" rel="noopener">Ver mapa</a>`
       : '—';
     const sync = a.sync === 'enviado'
       ? '<span class="badge badge-ok">Enviado</span>'
@@ -140,7 +140,7 @@ function filasActividades(acts, conEstudiante = true) {
       <td>${a.distancia ? formatoKm(a.distancia) : '—'}</td>
       <td>${ubic}</td>
       <td>${sync}</td>
-      <td><button class="btn btn-sm btn-peligro" data-eliminar-actividad="${a.id}" aria-label="Eliminar actividad">✕</button></td>
+      <td><button class="btn btn-sm btn-peligro" data-eliminar-actividad="${a.id}" >Eliminar</button></td>
     </tr>`;
   }).join('');
 }
@@ -346,7 +346,7 @@ $('#form-actividad').addEventListener('submit', async (e) => {
     const nombre = nombreEstudiante(datos.estudianteId);
 
     // 2) Notificación local de confirmación
-    await notificar('Actividad registrada ✅', `${nombre}: ${datos.actividad} · ${datos.duracion} min${datos.distancia ? ` · ${formatoKm(datos.distancia)}` : ''}`);
+    await notificar('Actividad registrada', `${nombre}: ${datos.actividad} · ${datos.duracion} min${datos.distancia ? ` · ${formatoKm(datos.distancia)}` : ''}`);
 
     f.reset();
     f.fecha.value = hoy();
